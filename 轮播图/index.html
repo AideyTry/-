@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{
+			margin:0;
+			padding:0;
+		}
+		ul{
+			list-style:none;
+		}
+		img{
+			vertical-align: top;
+		}
+		.box{
+			width:490px;
+			height:170px;
+			margin:100px auto;
+			padding:5px;
+			border:1px solid #ccc;
+			position:relative;
+		}
+		.inner{
+			width:490px;
+			height:170px;
+			overflow:hidden;
+			position:relative;
+		}
+		.inner ul{
+			width:510%;
+			position:absolute;
+			top:0;
+			left:0;
+		}
+		.inner li{
+			float:left;
+		}
+		.square{
+			position:absolute;
+			right:10px;
+			bottom:10px;
+		}
+		.square span{
+			display:inline-block;
+			width:16px;
+			height:16px;
+			background-color:#fff;
+			text-align:center;
+			line-height: center;
+			cursor:pointer;
+		}
+		.square span.current{
+			background-color: orangered;
+			color:#fff;
+		}
+		#arr {
+			display:none;
+		}
+		#arr span{
+			width:40px;
+			height:40px;
+			position:absolute;
+			left:5px;
+			top:50%;
+			margin-top:-20px;
+			background:#000;
+			cursor:pointer;
+			line-height: 40px;
+			text-align:center;
+			font-weight:bold;
+			font-family:'黑体';
+			font-size:30px;
+			color:#fff;
+			opacity:0.7;
+			border:1px solid #fff;
+		}
+		#arr #right{
+			right:5px;
+			left:auto;
+		}
+	</style>
+</head>
+<body>
+	<div class="box">
+		<div class="inner">
+			<ul>
+				<a href=""><img src="images/01.jpg" alt=""></a>
+				<a href=""><img src="images/02.jpg" alt=""></a>
+				<a href=""><img src="images/03.jpg" alt=""></a>
+				<a href=""><img src="images/04.jpg" alt=""></a>
+				<a href=""><img src="images/05.jpg" alt=""></a>
+			</ul>
+			<div class="square">
+				<span class="current">1</span>
+				<span>2</span>
+				<span>3</span>
+				<span>4</span>
+				<span>5</span>
+			</div>
+		</div>
+		<div id="arr">
+			<span id="left">&lt</span>
+			<span id="right">&gt</span>
+		</div>
+	</div>
+	<script src='animate.js'></script>
+	<script>
+		//找对象
+		let box=document.querySelector('.box');
+		let inner=box.children[0];
+		let ul=inner.children[0];
+		let lis=ul.children;
+		let square=inner.children[1];
+		let spans=square.children;
+		//左右焦点的对象
+		let arr=document.querySelector('#arr');
+		let leftArr=document.querySelector("#left");
+		let rightArr=document.querySelector("#right");
+
+
+		let imgWidth=inner.offsetWidth;
+		//高亮排他
+		for(let i=0;i<spans.length;i++){
+			spans[i].index=i;
+			spans[i].addEventListener('click',function(){
+				for(let i=0;i<spans.length;i++){
+					spans[i].className='';
+				}
+				this.className='current';
+				//移动ul
+				let index=this.index;
+				let target=-imgWidth*index;
+				animate(ul,target);
+			})
+		}
+
+		//鼠标经过盒子让箭头显示
+		box.onmouseover = function(){
+			arr.style.display= 'block';
+		}
+
+		//鼠标离开盒子让箭头隐藏
+		box.onmouseout = function () {
+			arr.style.display = 'none';
+		}
+		// box.addEventListener('onmouseover',function(){
+		// 	console.log(111);
+		// 	arr.style.display= 'block';
+		// });
+		//鼠标离开盒子让箭头隐藏
+		// box.addEventListener('onmouseout',function(){
+		// 			arr.style.display= 'none';
+		// 		});
+		let pic=0;
+		//点击右箭头
+		rightArr.addEventListener('click',function(){
+			if(pic<lis.length-1){
+				pic++;
+			}
+			target=-pic*imgWidth;
+			animate(ul,target);
+		})
+		//点击左箭头
+		leftArr.addEventListener('click',function(){
+			if(pic>0){
+				pic--;
+			}
+			target=-pic*imgWidth;
+			animate(ul,target);
+		})
+	</script>
+</body>
+</html>
